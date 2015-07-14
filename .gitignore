@@ -7,9 +7,17 @@
 *.o
 *.so
 
-# Build Directory for ns3 #
-###########################
-ns-3.23/build/
+# Build files and unchanged files for ns-3.20 #
+###############################################
+ns-3.20/build/
+.config
+README
+bake/
+build.py
+constants.py
+netanim-3.105/
+pybindgen-0.17.0.868/
+util.py
 
 
 # Packages #
