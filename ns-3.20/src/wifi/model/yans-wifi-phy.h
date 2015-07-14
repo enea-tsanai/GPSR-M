@@ -36,7 +36,7 @@
 #include "wifi-preamble.h"
 #include "wifi-phy-standard.h"
 #include "interference-helper.h"
-
+#include "snr-tag.h"
 
 namespace ns3 {
 
