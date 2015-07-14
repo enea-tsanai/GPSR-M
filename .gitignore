@@ -18,7 +18,7 @@ constants.py
 netanim-3.105/
 pybindgen-0.17.0.868/
 util.py
-ns-3.20/**/*.pyc
+*.pyc
 ns-3.20/waf-tools/
 
 
