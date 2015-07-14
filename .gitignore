@@ -20,6 +20,7 @@ pybindgen-0.17.0.868/
 util.py
 *.pyc
 *.waf-*
+*.lock-waf*
 ns-3.20/waf-tools/
 
 
