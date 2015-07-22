@@ -5,8 +5,27 @@
 #* e-mail: tsanai@ceid.upatras.gr, tsanaienea@gmail.com
 #*
 
+# example: ./run.sh --duration=40 --AnimTest=false --Anim=false
+
+
+
+# General Params
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+scenToRun="ScenNumOfRun"
+script="vanet"
+duration=40.0
+numNodes=50
+Anim=false
+AnimTest=false	 	#Run the script just for animation
+Reset=false			#Reset Mobility and Buildings
+logging=false		#Log messages on screen
+tracing=false		#Log messages on files
+
+
 
 # Functions
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
 function show_help {
 	echo "help!"
@@ -22,27 +41,29 @@ function write_results {
 
 	# Average delay in ms
 	echo -e "*Average Delay*"
-	cat logs/"Rx"_$RP.txt | tr -d '+','ns' | gawk '{ sum += $17; i +=1 }; END { print (sum / i) / 10^6 }' > logs/$scen/"E2E_rp_"$RP".txt"	
+	cat logs/"Rx"_$RP.txt | tr -d '+','ns' | gawk '{ sum += $17; i +=1 }; END { print (sum / i) / 10^6 }' > logs/$scenToRun/"E2E_rp_"$RP".txt"	
 	cat logs/"Rx"_$RP.txt | tr -d '+','ns' | gawk '{ sum += $17; i +=1 }; END { print (sum / i) / 10^6 }'
 	echo -e "-------\n"
 	
 	# Average energy in jouls
-	echo -e "*Average Energy*"
-	gawk '{ sum += $2; i +=1 }; END { print (sum / i) }' logs/"EN_rp_"$RP".txt" > logs/$scen/"ENERGY_rp_"$RP".txt"
-	gawk '{ sum += $2; i +=1 }; END { print (sum / i) }' logs/"EN_rp_"$RP".txt"
-	echo -e "-------\n"
+	#echo -e "*Average Energy*"
+	#gawk '{ sum += $2; i +=1 }; END { print (sum / i) }' logs/"EN_rp_"$RP".txt" > logs/$scenToRun/"ENERGY_rp_"$RP".txt"
+	#gawk '{ sum += $2; i +=1 }; END { print (sum / i) }' logs/"EN_rp_"$RP".txt"
+	#echo -e "-------\n"
 
 	PS=$(wc -l < logs/"Tx"_$RP.txt);
 	PR=$(wc -l < logs/"Rx"_$RP.txt);
 
 	# echo "Packets Sent: " ${PS}
 	# echo "Packets Received: " ${PR}
-	# echo $(( ($PR / $PS) * 100)) > logs/$scen/"PDR_rp_"$RP".txt"
+	# echo $(( ($PR / $PS) * 100)) > logs/$scenToRun/"PDR_rp_"$RP".txt"
 	
 
 	PDR=$(bc <<< "scale=4;($PR/$PS)*100")
 	echo -e "TX: $PS \nRX: $PR \nPDR: $PDR" 
-	echo -e "TX: $PS \nRX: $PR \nPDR: $PDR"  > logs/$scen/"PDR_rp_"$RP".txt"
+	echo -e "TX: $PS \nRX: $PR \nPDR: $PDR"  > logs/$scenToRun/"PDR_rp_"$RP".txt"
+
+	mv logs/"out_"$RP.txt logs/$scenToRun/
 
 	echo -e "------- **END** ------- \n"
 }
@@ -131,7 +152,7 @@ function set_DIRS {
 	# Working DIR
 	DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 	# Output
-	mkdir -p logs logs/$scen
+	mkdir -p logs logs/$scenToRun
 	buildingsFile="scripts/topology/buildings.txt"
 	MovementsDIR=$DIR/scripts/mobility/BonMotion
 	traceFile=$MovementsDIR/scenario.ns_movements
@@ -139,28 +160,15 @@ function set_DIRS {
 	# traceFile="/home/fotis/Documents/RU6/NETWORK-SIMULATOR/NS3/ns-allinone-3.21/ns-3.21/VanetsJournal/tests/test2.ns_movements"
 }
 
-#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
 
-# Clear files before writing results to them
-set_DIRS
 
 
-# General Params
-$scen="ManhattanGrid";
-script="vanet"
-duration=40.0
-numNodes=50
-Anim=false
-AnimTest=false	 	#Run the script just for animation
-Reset=false			#Reset Mobility and Buildings
-logging=false		#Log messages on screen
-tracing=false		#Log messages on files
-
-
-#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
 # Network Simulation Paramaters
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
 packetSize=256
 numPackets=100
 interval=0.1
@@ -229,6 +237,44 @@ while [ "$#" -gt 0 ]; do
            echo 'ERROR: Must specify a non-empty "--AnimTest true|false" argument.' >&2
            exit 1
            ;;
+    # reset 
+       -res|--reset)
+           if [ "$#" -gt 1 ]; then
+               reset=$2
+               echo "reset = " $reset
+               shift 2
+               continue
+           else
+               echo 'ERROR: Must specify a non-empty "--reset RESET" argument.' >&2
+               exit 1
+           fi
+           ;;
+       --reset=?*)
+           reset=${1#*=}
+           ;;
+       --reset=)
+           echo 'ERROR: Must specify a non-empty "--reset RESET" argument.' >&2
+           exit 1
+           ;;
+    # scen 
+       -scen|--scenToRun)
+           if [ "$#" -gt 1 ]; then
+               scenToRun=$2
+               echo "scenToRun = " $scenToRun
+               shift 2
+               continue
+           else
+               echo 'ERROR: Must specify a non-empty "--scenToRun scenToRun" argument.' >&2
+               exit 1
+           fi
+           ;;
+       --scenToRun=?*)
+           scenToRun=${1#*=}
+           ;;
+       --scenToRun=)
+           echo 'ERROR: Must specify a non-empty "--scenToRun scenToRun" argument.' >&2
+           exit 1
+           ;;
 	# RP 
        -r|--RP)
            if [ "$#" -gt 1 ]; then
@@ -262,6 +308,9 @@ while [ "$#" -gt 0 ]; do
    shift
 done
 
+# Clear files before writing results to them
+set_DIRS
+
 
 # Logs for Network Params
 echo -e "Routing:   \t" $RP
@@ -282,8 +331,8 @@ RoadWidth=20
 MapX=$((($RoadsInY - 1) * $RoadLength))
 MapY=$((($RoadsInX - 1) * $RoadLength))
 
-echo "MapX: " $MapX
-
+echo -e "MapX:      \t" $MapX
+echo -e "MapY:      \t" $MapY
 
 
 
