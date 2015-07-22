@@ -153,7 +153,7 @@ duration=40.0
 numNodes=50
 Anim=false
 AnimTest=false	 	#Run the script just for animation
-Reset=true			#Reset Mobility and Buildings
+Reset=false			#Reset Mobility and Buildings
 logging=false		#Log messages on screen
 tracing=false		#Log messages on files
 
