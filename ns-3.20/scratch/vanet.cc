@@ -30,9 +30,9 @@
 
 //#include "src/core/model/object-base.h"
 #include "ns3/flow-monitor-module.h"
-#include "ns3/building-list.h"
-#include "src/winner-models/model/building-map-model.h"
-#include "ns3/winner-models-module.h"
+// #include "ns3/building-list.h"
+// #include "src/winner-models/model/building-map-model.h"
+// #include "ns3/winner-models-module.h"
 
 
 #include "ns3/ocb-wifi-mac.h"
@@ -217,14 +217,14 @@ main (int argc, char *argv[])
   /* Mobility */
   // Load external mobility file, e.g. from SUMO and configure the VANET mobility
   std::cout << "traceFile: " << traceFile << "\n";
-  Ns2MobilityHelper ns2 = Ns2MobilityHelper::Default (traceFile); 
+  Ns2MobilityHelper ns2 = Ns2MobilityHelper (traceFile); 
   ns2.Install();
   
   
   /* Set Map */
-  GridMap gridRoadMap = GridMap(RoadsInX, RoadsInY, RoadLength);
-  BuildingMapModel Map = BuildingMapModel(buildingsFile, &gridRoadMap);    
-  ShadowingModel shadow = ShadowingModel();
+  // GridMap gridRoadMap = GridMap(RoadsInX, RoadsInY, RoadLength);
+  // BuildingMapModel Map = BuildingMapModel(buildingsFile, &gridRoadMap);    
+  // ShadowingModel shadow = ShadowingModel();
   
   
   /* Create 802.11p Devices*/
@@ -247,11 +247,11 @@ main (int argc, char *argv[])
   if (buildings)
   {
     std::cout << "Simulation with Buildings\n" ;
-    wifiChannel.AddPropagationLoss("ns3::WinnerB1LossModel",
-                                  "Frequency", DoubleValue(5.9e9),
-                                  "EffEnvironmentHeight", DoubleValue(1),
-                                  "VisibilityModel", PointerValue(&Map),
-                                  "ShadowingModel", PointerValue(&shadow));
+    // wifiChannel.AddPropagationLoss("ns3::WinnerB1LossModel",
+    //                               "Frequency", DoubleValue(5.9e9),
+    //                               "EffEnvironmentHeight", DoubleValue(1),
+    //                               "VisibilityModel", PointerValue(&Map),
+    //                               "ShadowingModel", PointerValue(&shadow));
   }
   else
   {
