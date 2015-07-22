@@ -130,7 +130,6 @@ function gen_buildings {
 function set_DIRS {
 	# Working DIR
 	DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-	
 	# Output
 	mkdir -p logs logs/$scen
 	buildingsFile="scripts/topology/buildings.txt"
@@ -156,7 +155,7 @@ Anim=false
 AnimTest=false	 	#Run the script just for animation
 Reset=true			#Reset Mobility and Buildings
 logging=false		#Log messages on screen
-tracing=true		#Log messages on files
+tracing=false		#Log messages on files
 
 
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
