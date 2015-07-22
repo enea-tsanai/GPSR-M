@@ -133,8 +133,8 @@ function set_DIRS {
 	
 	# Output
 	mkdir -p logs logs/$scen
-	buildingsFile="scratch/buildings.txt"
-	MovementsDIR=$DIR/VanetsJournal/BonMotion
+	buildingsFile="scripts/topology/buildings.txt"
+	MovementsDIR=$DIR/scripts/mobility/BonMotion
 	traceFile=$MovementsDIR/scenario.ns_movements
 	# traceFile=$DIR/VanetsJournal/tests/test2.ns_movements
 	# traceFile="/home/fotis/Documents/RU6/NETWORK-SIMULATOR/NS3/ns-allinone-3.21/ns-3.21/VanetsJournal/tests/test2.ns_movements"
@@ -151,7 +151,7 @@ set_DIRS
 $scen="scenario_a";
 script="vanet"
 duration=40.0
-numNodes=100
+numNodes=50
 Anim=false
 AnimTest=false	 	#Run the script just for animation
 Reset=true			#Reset Mobility and Buildings
@@ -285,6 +285,9 @@ MapY=$((($RoadsInX - 1) * $RoadLength))
 
 echo "MapX: " $MapX
 
+
+
+
 # Buildings
 buildings=true
 BuildingsInX=$(($RoadsInX-1))
@@ -304,10 +307,12 @@ if [ $Reset = true ]; then
 	echo ""
 fi
 
-
 # Logs for Map Params
 echo -e "Map:       \t" $MapX"m x" $MapY"m"
-echo -e "Buildings: \t" $BuildingsInX "x" $BuildingsInY
+if [ $buildings = true ]; then
+	echo -e "Buildings: \t" $BuildingsInX "x" $BuildingsInY
+fi
+
 
 
 
