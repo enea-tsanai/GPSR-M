@@ -73,8 +73,8 @@ function gen_mobility {
 	# 	-v <no. of blocks along y-axis>
 
 	rm -rf scenario.*
-	bm="/home/fotis/Documents/RU6/NETWORK-SIMULATOR/bonnmotion-2.1a/bin/bm"
-	$bm -f scenario $scen -n $numNodes -d $duration -i 3000 -x $MapX -y $MapY -c 0.2 -e 1 -m 11.0 -o 5 -t 0.5 -p 0.5 -q 100 -u $BuildingsInX -v $BuildingsInY
+	bm="/home/ru6/bonnmotion-2.1.3/bin/bm"
+	$bm -f scenario ManhattanGrid -n $numNodes -d $duration -i 3000 -x $MapX -y $MapY -c 0.2 -e 1 -m 11.0 -o 5 -t 0.5 -p 0.5 -q 100 -u $BuildingsInX -v $BuildingsInY
 	$bm NSFile -f scenario > /dev/null 2>&1
 	echo "Test" $MovementsDIR
 	mv scenario* $MovementsDIR
@@ -147,7 +147,7 @@ set_DIRS
 
 
 # General Params
-$scen="scenario_a";
+$scen="ManhattanGrid";
 script="vanet"
 duration=40.0
 numNodes=50
@@ -273,8 +273,8 @@ echo -e "interval:  \t" $interval
 # Map, Roads and buildings
 
 # Roads
-RoadsInX=7
-RoadsInY=7
+RoadsInX=5
+RoadsInY=5
 RoadLength=150
 RoadWidth=20
 
@@ -288,20 +288,20 @@ echo "MapX: " $MapX
 
 
 # Buildings
-buildings=true
+buildings=false
 BuildingsInX=$(($RoadsInX-1))
 BuildingsInY=$(($RoadsInY-1))
 
 echo -e "Buildings:  \t" $buildings
 
 # Custom Buildings Generator - Generate Buildings
-if [ $Reset = true ]; then
-	gen_buildings	
-fi
+# if [ $Reset = true ]; then
+# 	#gen_buildings	
+# fi
 
 # BonnMotion - Generate Manhattan Grid Node Movements
 if [ $Reset = true ]; then
-	# gen_mobility
+	gen_mobility
 	# ./waf --run "MobilityGen";
 	echo ""
 fi
