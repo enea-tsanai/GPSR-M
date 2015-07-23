@@ -164,7 +164,7 @@ main (int argc, char *argv[])
   AnimTest=false;
   
   /* Connections */
-  const int conns = 1;  
+  const int conns = 5;  
   uint32_t srcs[conns];
   uint32_t rcvs[conns];
     
@@ -376,15 +376,27 @@ main (int argc, char *argv[])
     
     /* UDP Server Application */
     interPacketInterval = Seconds (interval);
-    srcs[0] = 0;
-    rcvs[0] = 1;
+    // srcs[0] = 0;
+    // rcvs[0] = 1;
     
 //    srcs[1] = 2;
 //    rcvs[1] = 3;
 //    
 //    srcs[2] = 4;
 //    rcvs[2] = 5;
-       
+    
+    int j = 0;
+    int g = 1;
+
+    for (int i=0; i < conns; i++)
+    {
+      srcs[i] = j;
+      rcvs[i] = g;
+      std::cout << "srcs[" << i <<"] = " << j <<"\n";
+      std::cout << "rcvs[" << i <<"] = " << g <<"\n";
+      j+=2;
+      g+=2;
+    }
     
     /* Servers */
     for (int i=0; i < conns; i++)

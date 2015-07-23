@@ -8,7 +8,7 @@
 
 scenToRun="Manhattan"
 
-for i in `seq 1 2`;
+for i in `seq 1 5`;
 do
         cd /home/ru6/ns3-gpsr-m_v1_\(ns3.20\)/ns-3.20/
 		./run.sh --duration=40 --AnimTest=false --Anim=false --reset=true --RP=5 --scenToRun=$scenToRun"/"$i #GPSR_V1

@@ -18,7 +18,7 @@ duration=40.0
 numNodes=50
 Anim=false
 AnimTest=false	 	#Run the script just for animation
-Reset=false			#Reset Mobility and Buildings
+reset=false			#Reset Mobility and Buildings
 logging=false		#Log messages on screen
 tracing=false		#Log messages on files
 
@@ -43,7 +43,6 @@ function write_results {
 	echo -e "*Average Delay*"
 	cat logs/"Rx"_$RP.txt | tr -d '+','ns' | gawk '{ sum += $17; i +=1 }; END { print (sum / i) / 10^6 }' > logs/$scenToRun/"E2E_rp_"$RP".txt"	
 	cat logs/"Rx"_$RP.txt | tr -d '+','ns' | gawk '{ sum += $17; i +=1 }; END { print (sum / i) / 10^6 }'
-	echo -e "-------\n"
 	
 	# Average energy in jouls
 	#echo -e "*Average Energy*"
@@ -65,7 +64,7 @@ function write_results {
 
 	mv logs/"out_"$RP.txt logs/$scenToRun/
 
-	echo -e "------- **END** ------- \n"
+	echo -e "------- **END** ------- \n\n\n\n\n"
 }
 
 # Generates nodes' movement in $scen scenarios
@@ -99,7 +98,7 @@ function gen_mobility {
 	$bm NSFile -f scenario > /dev/null 2>&1
 	echo "Test" $MovementsDIR
 	mv scenario* $MovementsDIR
-	echo "Regenerated Mobility"
+	echo "Regenerated Mobility..."
 }
 
 # Generates Buildings in $scen scenarios
@@ -158,6 +157,10 @@ function set_DIRS {
 	traceFile=$MovementsDIR/scenario.ns_movements
 	# traceFile=$DIR/VanetsJournal/tests/test2.ns_movements
 	# traceFile="/home/fotis/Documents/RU6/NETWORK-SIMULATOR/NS3/ns-allinone-3.21/ns-3.21/VanetsJournal/tests/test2.ns_movements"
+
+	echo -e "------- **SIMULATION START** ------- \n"
+	echo -e "DIR="$DIR
+	echo -e "traceFile (MobilityFile)="$traceFile
 }
 
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -349,10 +352,9 @@ echo -e "Buildings:  \t" $buildings
 # fi
 
 # BonnMotion - Generate Manhattan Grid Node Movements
-if [ $Reset = true ]; then
+if [ $reset = true ]; then
 	gen_mobility
 	# ./waf --run "MobilityGen";
-	echo ""
 fi
 
 # Logs for Map Params
